@@ -46,5 +46,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/mi-app:latest
-            ${{ secrets.DOCKER_USERNAME }}/mi-app:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ github.sha }}
