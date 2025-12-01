@@ -1,46 +1,84 @@
 name: CI/CD con GitHub Flow
 
-# GitHub Flow: solo se ejecuta cuando hay merge a main
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-test-publish:
+  # 1. JOB BUILD
+  build:
     runs-on: ubuntu-latest
-
+    outputs:
+      image-tag: ${{ steps.tag.outputs.tag }}
     steps:
-      # 1. Checkout del código
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2. Configurar Node.js
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # 3. Instalar dependencias
       - name: Instalar dependencias
-        run: npm install
+        run: npm ci
 
-      # 4. Ejecutar tests (aunque sean básicos)
-      - name: Ejecutar tests
-        run: npm test || echo "No hay tests reales aún, pero pasa"
+      - name: Build (compilar/transpilar si fuera necesario)
+        run: echo "No hay build real en Node.js puro, pero aquí iría npm run build"
 
-      # 5. Login en Docker Hub
+      - name: Generar tag de imagen
+        id: tag
+        run: |
+          echo "tag=${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Construir imagen Docker (solo build, sin push aún)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false              # ¡Importante! Solo construye
+          tags: ${{ steps.tag.outputs.tag }}, ${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
+          cache-to: type=inline
+
+  # 2. JOB TEST (depende del build)
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar tests (aquí pones los reales)
+        run: |
+          echo "Ejecutando tests..."
+          # Si no tienes tests reales aún, puedes poner uno que siempre pase:
+          node -e "console.log('Tests simulados OK')"
+
+          # O mejor: instala Jest y crea tests reales (te ayudo abajo)
+
+  # 3. JOB PUBLISH (solo se ejecuta si test pasó y solo en main)
+  publish:
+    needs: test
+    if: github.ref == 'refs/heads/main'   # Solo publica en main, no en PRs
+    runs-on: ubuntu-latest
+    environment: production               # (opcional, pero muy profesional)
+    steps:
       - name: Login a Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 6. Construir y pushear imagen Docker
-      - name: Build y Push Docker image
+      - name: Pull cache y construir + pushear imagen
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -48,3 +86,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
             ${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ github.sha }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
