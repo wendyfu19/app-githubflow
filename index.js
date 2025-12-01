@@ -3,7 +3,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('<h1>¡Hola! Mi app con GitHub Flow + CI/CD + Docker funciona 🚀</h1><p>Versión: 1.0.0</p>');
+//   res.send('<h1>¡Hola! Mi app con GitHub Flow + CI/CD + Docker funciona 🚀</h1><p>Versión: 1.0.0</p>');
+res.send('<h1>¡NUEVA VERSIÓN 2.0! Deploy automático con GitHub Flow 🎉</h1>');
 });
 
 app.get('/health', (req, res) => {
