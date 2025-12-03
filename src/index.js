@@ -3,7 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // NUEVO: leer color y título desde ConfigMap
-const bgColor = process.env.APP_COLOR || '#10b981';
+const bgColor = process.env.APP_COLOR || '#1e64e6';
 const title = process.env.APP_TITLE || 'Mi App con GitHub Flow + K8s';
 
 app.get('/', (req, res) => {
