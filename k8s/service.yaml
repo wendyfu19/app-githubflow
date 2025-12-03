@@ -1,3 +1,30 @@
+# Servicio estable (versión anterior)
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-githubflow-stable-service
+spec:
+  selector:
+    app: app-githubflow
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
+# Servicio canary (nueva versión)
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-githubflow-canary-service
+spec:
+  selector:
+    app: app-githubflow
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
+# Servicio principal (balancea entre stable y canary)
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,7 +33,7 @@ spec:
   selector:
     app: app-githubflow
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer   # o NodePort si usas Minikube
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer

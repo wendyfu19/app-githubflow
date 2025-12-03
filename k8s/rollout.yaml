@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: app-githubflow-rollout
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-githubflow
+  template:
+    metadata:
+      labels:
+        app: app-githubflow
+    spec:
+      containers:
+      - name: app
+        image: wendyfu19/app-githubflow:latest  # Se actualiza con :latest o tag semántico
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        imagePullPolicy: Always
+  # ESTRATEGIA CANARY: 20% tráfico nuevo → 50% → 100%
+  strategy:
+    canary:
+      canaryService: app-githubflow-canary-service  # Servicio para canary traffic
+      stableService: app-githubflow-stable-service  # Servicio para stable traffic
+      steps:
+      - setWeight: 20  # 20% tráfico a nueva versión
+      - pause: {}      # Pausa manual/automatica (puedes añadir analysis para auto)
+      - setWeight: 50  # 50% tráfico
+      - pause: {}
+      - setWeight: 100 # 100% tráfico
