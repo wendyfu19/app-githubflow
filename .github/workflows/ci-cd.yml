@@ -68,21 +68,40 @@ jobs:
   # 3. JOB PUBLISH (solo se ejecuta si test pasó y solo en main)
   publish:
     needs: test
-    if: github.ref == 'refs/heads/main'   # Solo publica en main, no en PRs
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: production               # (opcional, pero muy profesional)
+    permissions:
+      contents: write        # necesario para crear tags
     steps:
-      # NECESARIO: volver a descargar el código
       - name: Checkout código
         uses: actions/checkout@v4
-      # Login a Docker Hub
+        with:
+          fetch-depth: 0       # importante para git tags
+
       - name: Login a Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Construir y pushear la imagen
+      # GENERAR TAG SEMÁNTICO AUTOMÁTICO
+      - name: Generar versión semántica
+        id: version
+        uses: paulhatch/semantic-version@v5.0.0
+        with:
+          # Cambia según tus convenciones de commit
+          # feat → minor, fix → patch, chore/docs → patch, BREAKING → major
+          major_pattern: "breaking:"
+          minor_pattern: "feat:"
+          format: "${major}.${minor}.${patch}"
+
+      # CREAR GIT TAG y pushearlo
+      - name: Crear y pushear git tag
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}
+
+      # CONSTRUIR Y PUSHEAR IMAGEN CON TAG SEMÁNTICO + latest
       - name: Build y Push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -90,7 +109,5 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
-            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ github.sha }}
-          # Opcional pero recomendado: usar cache para que sea más rápido
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
-          cache-to: type=inline
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ steps.version.outputs.version }}
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:v${{ steps.version.outputs.version }}
