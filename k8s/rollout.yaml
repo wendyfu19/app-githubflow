@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: app-githubflow-rollout
+  annotations:
+    reloader.stakater.com/match: "true"  # Mantiene auto-reinicio para ConfigMap
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-githubflow
+  template:
+    metadata:
+      labels:
+        app: app-githubflow
+    spec:
+      containers:
+      - name: app
+        image: wendyfu19/app-githubflow:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        imagePullPolicy: Always
+  strategy:
+    canary:  # ← ESTRATEGIA CANARY
+      steps:
+      - setWeight: 20  # 20% tráfico a nueva versión
+      - pause: {}      # Pausa manual (promueve para continuar)
+      - setWeight: 50  # 50%
+      - pause: {}
+      - setWeight: 100 # 100%
