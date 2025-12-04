@@ -4,5 +4,5 @@ metadata:
   name: app-config
 data:
   NODE_ENV: production
-  APP_COLOR: "#b97810"      # verde (lo vamos a cambiar luego a azul)
-  APP_TITLE: "Mi App con GitHub Flow + K8s"
+  APP_COLOR: "#1610b9"      # verde (lo vamos a cambiar luego a azul)
+  APP_TITLE: "Prueba App con k8s"
