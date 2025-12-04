@@ -1,9 +1,14 @@
+# k8s/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-githubflow
   labels:
     app: app-githubflow
+  annotations:
+    # ESTA ANOTACIÓN HACE QUE RELOADER REINICIE LOS PODS AUTOMÁTICAMENTE
+    # cuando cambie el ConfigMap llamado "app-config"
+    reloader.stakater.com/match: "true"
 spec:
   replicas: 3
   selector:
@@ -13,10 +18,13 @@ spec:
     metadata:
       labels:
         app: app-githubflow
+      annotations:
+        # Esta segunda anotación es opcional pero ayuda a Reloader a detectar cambios más rápido
+        checksum/configmap: {{ checksum "app-config" | quote }}
     spec:
       containers:
       - name: app
-        image: wendyfu19/app-githubflow:latest   
+        image: wendyfu19/app-githubflow:latest
         ports:
         - containerPort: 3000
         envFrom:
