@@ -6,8 +6,7 @@ metadata:
   labels:
     app: app-githubflow
   annotations:
-    # ESTA ANOTACIÓN HACE QUE RELOADER REINICIE LOS PODS AUTOMÁTICAMENTE
-    # cuando cambie el ConfigMap llamado "app-config"
+    # ← ESTA ANOTACIÓN HACE QUE RELOADER REINICIE LOS PODS CUANDO CAMBIE app-config
     reloader.stakater.com/match: "true"
 spec:
   replicas: 3
@@ -18,9 +17,9 @@ spec:
     metadata:
       labels:
         app: app-githubflow
+      # ← Esta anotación es OPCIONAL pero ayuda a Reloader
       annotations:
-        # Esta segunda anotación es opcional pero ayuda a Reloader a detectar cambios más rápido
-        checksum/configmap: {{ checksum "app-config" | quote }}
+        reloader.stakater.com/search: "true"
     spec:
       containers:
       - name: app
