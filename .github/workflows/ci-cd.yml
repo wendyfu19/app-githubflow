@@ -94,6 +94,15 @@ jobs:
           major_pattern: "breaking:"
           minor_pattern: "feat:"
           format: "${major}.${minor}.${patch}"
+      - name: Build y Push Docker image (CON TAG DEL COMMIT)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:latest
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/app-githubflow:v${{ steps.version.outputs.version }}
 
       # CREAR GIT TAG y pushearlo
       - name: Crear y pushear git tag

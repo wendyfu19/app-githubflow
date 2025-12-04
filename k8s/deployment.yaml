@@ -5,7 +5,7 @@ metadata:
   labels:
     app: app-githubflow
   annotations:
-    reloader.stakater.com/match: "true"  # ← ESTO ACTIVA EL REINICIO AUTO PARA CONFIGMAPS
+    reloader.stakater.com/match: "true"  
 spec:
   replicas: 3
   selector:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: wendyfu19/app-githubflow:latest
+        image: wendyfu19/app-githubflow:${GIT_COMMIT:-latest}
         ports:
         - containerPort: 3000
         envFrom:
