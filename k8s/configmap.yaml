@@ -2,7 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
+  namespace: production
 data:
   NODE_ENV: production
-  APP_COLOR: "#10b91b"      # verde (lo vamos a cambiar luego a azul)
-  APP_TITLE: "Prueba App con k8s"
+  APP_COLOR: "#10b981"                    # verde esmeralda (versión estable)
+  APP_TITLE: "Mi App - Versión Estable + Canary"
