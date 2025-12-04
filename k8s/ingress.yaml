@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: app-githubflow.local   # cambia si usas otro
+  - host: vps-c1bf8222.vps.ovh.ca   # cambia si usas otro
     http:
       paths:
       - path: /
