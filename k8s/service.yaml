@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 3000
-  type: NodePort  # Cambia LoadBalancer a NodePort – ¡esto lo arregla!
+  type: NodePort  # Cambia LoadBalancer a NodePort – ¡esto lo arregla!		
