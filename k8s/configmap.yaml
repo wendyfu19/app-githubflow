@@ -5,5 +5,5 @@ metadata:
   namespace: production
 data:
   NODE_ENV: production
-  APP_COLOR: "#10b981"                    # verde esmeralda (versión estable)
-  APP_TITLE: "Mi App - Versión Estable + Canary"
+  APP_COLOR: "#f1a5b6"                    # verde esmeralda (versión estable)
+  APP_TITLE: "Aplicacion para curso Devops"
