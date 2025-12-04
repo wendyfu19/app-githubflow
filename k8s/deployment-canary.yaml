@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-githubflow-canary
+  labels:
+    app: app-githubflow-canary
+  annotations:
+    reloader.stakater.com/match: "true"  
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-githubflow-canary
+  template:
+    metadata:
+      labels:
+        app: app-githubflow-canary
+    spec:
+      containers:
+      - name: app
+        image: wendyfu19/app-githubflow:0.3.6
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        imagePullPolicy: Always
