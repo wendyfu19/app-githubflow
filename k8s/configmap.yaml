@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
-  namespace: production
 data:
   NODE_ENV: production
   APP_COLOR: "#f1a5b6"                    # verde esmeralda (versión estable)
