@@ -4,5 +4,5 @@ metadata:
   name: app-config
 data:
   NODE_ENV: production
-  APP_COLOR: "#1610b9"      # verde (lo vamos a cambiar luego a azul)
+  APP_COLOR: "#10b91b"      # verde (lo vamos a cambiar luego a azul)
   APP_TITLE: "Prueba App con k8s"
