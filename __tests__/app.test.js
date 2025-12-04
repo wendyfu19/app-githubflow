@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../index.js'); // Asegúrate de exportar app
+const app = require('..src/index.js'); // Asegúrate de exportar app
 
 describe('API Health', () => {
   test('GET /health debería devolver status 200', async () => {
