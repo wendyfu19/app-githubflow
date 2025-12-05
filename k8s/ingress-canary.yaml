@@ -5,7 +5,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "50" # 10% tráfico al canary
+    nginx.ingress.kubernetes.io/canary-weight: "10" # 10% tráfico al canary
 spec:
   rules:
   - host: vps-c1bf8222.vps.ovh.ca
