@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/canary-weight: "10" # 10% tráfico al canary
 spec:
   rules:
-  - host: vps-c1bf8222.vps.ovh.ca
+  - host: orquestadores-del-caos.com
     http:
       paths:
       - path: /
