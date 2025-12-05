@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: wendyfu19/app-githubflow:0.3.27
+        image: wendyfu19/app-githubflow:0.3.29
         ports:
         - containerPort: 3000
         envFrom:
