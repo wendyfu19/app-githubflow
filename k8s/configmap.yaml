@@ -4,5 +4,5 @@ metadata:
   name: app-config
 data:
   NODE_ENV: production
-  APP_COLOR: "#f1a5b6"                    # verde esmeralda (versión estable)
-  APP_TITLE: "Aplicacion para curso Devops"
+  APP_COLOR: "#0c1424"                    # verde esmeralda (versión estable)
+  APP_TITLE: "Curso DevOps - Estrategias GitHub Flow y Canary"
