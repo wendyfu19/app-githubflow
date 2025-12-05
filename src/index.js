@@ -382,7 +382,7 @@ app.get('/', (req, res) => {
         
         <header>
             <h1>${title} <span class="version-badge">${canaryVersion}</span></h1>
-            <div class="subtitle">Orquestadores del Caos <span class="new-feature-badge">NUEVO</span></div>
+            <div class="subtitle">Orquestadores del Caos - CURSO DEVOPS!!! <span class="new-feature-badge">NUEVO</span></div>
         </header>
         
         <div class="intro-text">
